@@ -1,0 +1,51 @@
+---
+import { Popover } from 'webcoreui/astro'
+import ControllerIcon from '@lucide/astro/icons/gamepad-2';
+import Button from './Button.astro'
+
+// TASK: make the controls dependent on each game
+---
+
+<Button className="popover-trigger"><ControllerIcon class="controls-icon" /></Button>
+
+<Popover className="popover">
+    <h2>Controls</h2>
+    <p>Click to shoot</p>
+    <p>WASD to move</p>
+    <p>Space to jump</p>
+</Popover>
+
+<script>
+    import { popover } from 'webcoreui'
+
+    popover({
+        trigger: '.popover-trigger',
+        popover: '.popover',
+        position: 'top-end'
+    })
+</script>
+
+<style>
+	.controls-icon {
+		width: var(--size-icon-lg);
+		height: var(--size-icon-lg);
+	}
+
+	.popover {
+		padding: var(--gap-3) var(--gap-5);
+		background-color: var(--color-bg-alt3);
+		border: var(--border-thin) solid var(--color-border);
+		border-radius: var(--radius-md);
+		font-family: var(--font-sans);
+		font-size: var(--text-body);
+		line-height: var(--leading-snug);
+		color: var(--color-text);
+	}
+
+	.popover h2 {
+		margin-bottom: var(--gap-2);
+		font-size: var(--text-title);
+		font-weight: var(--weight-bold);
+		color: var(--color-brand);
+	}
+</style>

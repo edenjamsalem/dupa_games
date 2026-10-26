@@ -1,0 +1,194 @@
+---
+import { type CollectionEntry } from 'astro:content';
+import { Menu, Button, Sheet, Popover} from 'webcoreui/astro';
+import DupaLogo from '../assets/my_logo.png';
+import MenuIcon from '@lucide/astro/icons/menu';
+import Image from 'astro/components/Image.astro';
+
+const menu = [
+	{ name: 'Home', href: '/', active: true },
+	{ name: 'Credits', href: '/credits', active: true}
+];
+
+const menuLogo = {
+	url: DupaLogo.src,
+	width: 48,
+};
+
+const { gamesCollection } = Astro.props;
+
+const GAMES = gamesCollection.map((game: CollectionEntry<'games'>) => ({
+	name: game.data.title,
+	href: `/games/${game.id}`,
+}))
+
+// TASK: Replace the select dropdown with a popover, 
+// check the link i sent to see how to use the popover
+// it should still contain a vertical list of each game link
+// 
+---
+
+<script>
+	import { modal, popover } from 'webcoreui';
+
+	modal({
+		trigger: '.button',
+		modal: '.sheet'
+	})
+
+	popover({
+        trigger: '.games-popover-trigger',
+        popover: '.games-popover',
+		position: 'bottom-start'
+    })
+</script>
+
+<header>
+	<div class="mobile-header">
+		<Button className="button">
+			<MenuIcon stroke-width={2} size={38} />
+		</Button>
+		
+		<Sheet className="sheet" position="left" showCloseIcon={false}>
+			<a href="/" class="img-wrapper">
+				<Image src={DupaLogo} alt="Dupa Games Logo" width={80} />
+			</a>
+			{
+				menu.map((item) => (
+					<a href={item.href}>{item.name}</a>
+				))
+			}
+			<h3 class="games-heading">Games</h3>
+			<div class="games-list">
+				{
+					GAMES.map((game) => (
+						<a href={game.href}>{game.name}</a>
+					))
+				}
+			</div>
+		</Sheet>
+	</div>
+
+	<div class="desktop-header">
+		<Menu items={menu} logo={menuLogo} />
+		<div class="popover-wrapper">
+			<Button className="games-popover-trigger">Games</Button>
+			<Popover className="popover">
+    			<div class="games-list">
+					{
+						GAMES.map((game) => (
+							<a href={game.href}>{game.name}</a>
+						))
+					}
+				</div>
+			</Popover>
+		</div>
+	</div>
+</header>
+
+<style>
+	/* shared by both */
+	.games-list {
+		display: flex;
+		flex-direction: column;
+	}
+
+	a:hover {
+		color: var(--color-brand);
+		transform: scale(var(--scale-hover));
+		transition: transform var(--duration-fast) ease;
+	}
+
+	/* mobile only - sidebar menu */
+	.mobile-header {
+		display: flex;
+		justify-content: flex-end;
+		width: 100%;
+ 
+		.button {
+			padding: var(--gap-4);
+			transition: transform var(--duration-fast) ease;
+		}
+ 
+		.button:hover {
+			color: var(--color-brand);
+			transform: scale(var(--scale-hover));
+		}
+ 
+		.menu-icon {
+			width: var(--size-icon-md);
+			height: var(--size-icon-md);
+		}
+ 
+		a {
+			width: fit-content;
+			padding-block: var(--gap-1);
+		}
+ 
+		.sheet {
+			display: flex;
+			flex-direction: column;
+			width: var(--sheet-width);
+			padding: var(--gap-6);
+			background-color: var(--color-bg);
+			border-right: var(--border-thin) solid var(--color-border);
+			font-family: var(--font-sans);
+			font-size: var(--text-title);
+			font-weight: var(--weight-bold);
+ 
+			a.img-wrapper {
+				padding-bottom: var(--gap-6);
+				transform: none;
+			}
+		}
+ 
+		.sheet-logo {
+			width: var(--size-logo-sm);
+			height: auto;
+		}
+ 
+		.games-list {
+			padding-inline: var(--gap-6);
+		}
+ 
+		.games-heading {
+			padding-top: var(--gap-6);
+			font-size: var(--text-title);
+			font-weight: var(--weight-regular);
+			color: var(--color-text-subtle);
+		}
+	}
+	
+	.desktop-header {
+		display: none;
+	}
+	
+	/* desktop only - full header bar */
+	@media (min-width: 1024px) {
+		.mobile-header {
+			display: none;
+		}
+		
+		.desktop-header {
+			display: flex;
+			align-items: center;
+
+			font-family: var(--font-oswald);
+			font-size: var(--font-lg);
+			font-weight: bold;
+			background-color: var(--color-bg);
+			border-bottom: var(--border-thin) solid var(--color-border);
+			padding-block: var(--gap-2);
+		}
+
+		/* NOT WORKING */
+		:global(.games-popover-wrapper .games-popover .games-list) {
+			font-family: var(--font-oswald);
+		}
+
+		.games-popover-trigger {
+			font-size: var(--font-lg);
+			transform: translateX(-26);
+		}
+	}
+</style>

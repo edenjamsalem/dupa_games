@@ -1,0 +1,188 @@
+---
+// JavaScript Section
+// import DupaLogoText from '@/assets/my_logo_text.png';
+import DupaLogo from '@/assets/my_logo.png';
+import GameCard from '@/components/GameCard.astro';
+// import GamePreviewReel from '@/components/GamePreviewReel.astro';
+import Layout from '@/layouts/Layout.astro';
+import Image from 'astro/components/Image.astro';
+import { getCollection } from 'astro:content';
+
+const gamesCollection = await getCollection('games');
+const gameCount = gamesCollection.length;
+---
+
+<Layout>
+	<div class="page">
+		<section class="hero">
+			<div class="hero-logo">
+				<Image src={DupaLogo} alt="Dupa Games Logo" />
+			</div>
+			<div class="hero-text">
+				<h1>Welcome to Dupa Games</h1>
+					<p>
+						Hi I'm Hugo, a programming student from Australia.
+					</p>
+					<p>	
+						I'm planning to go to college next year to study computer science and I make 2D games for fun in my spare time.
+						<!-- Gaming is my passion, and making my own games has given me the freedom to create games exactly as I want them to be played. -->
+					</p>
+					<p>		
+						I made this site to share my creations with the world wide web. Please enjoy playing them and let me know if you like them!
+					</p>
+			</div>
+		</section>
+
+		<section class="games" aria-labelledby="games-heading">
+			<div class="section-head">
+				<h2 id="games-heading">All games</h2>
+				<p class="count">{gameCount} {gameCount === 1 ? 'game' : 'games'}</p>
+			</div>
+			<ul class="game-grid">
+				{
+					gamesCollection.map((game: any) => (
+						<li>
+							<GameCard
+								title={game.data.title}
+								description={game.data.description}
+								image={game.data.image}
+								video={game.data.video}
+								href={`games/${game.id}`}
+							/>
+						</li>
+					))
+				}
+			</ul>
+		</section>
+	</div>
+</Layout>
+
+<style>
+	/* .header { */
+		/* position: absolute; */
+		/* inset: 0; */
+		/* z-index: var(--z-header); */
+		/* height: fit-content; */
+	/* } */
+
+	.page {
+		display: flex;
+		flex-direction: column;
+		gap: var(--section-gap);
+		padding-bottom: var(--section-gap);
+	}
+
+	/* ---------- HERO ---------- */
+	.hero {
+		display: flex;
+		flex-direction: column; /* mobile: logo stacked above text */
+		align-items: center;
+		justify-content: center;
+		gap: var(--gap-8);
+		padding: var(--gap-6);
+		min-height: var(--hero-min-height);
+		text-align: center;
+
+		background-color: var(--color-bg-alt3);
+		border-bottom: var(--border-thin) solid var(--color-border);
+
+		@media (min-width: 800px) {
+			flex-direction: row; /* tablet: logo beside text */
+			text-align: left;
+			padding: 0;
+		}	
+	}
+
+	.hero-logo {
+		flex-shrink: 0;
+		aspect-ratio: 1;
+		width: var(--size-logo-hero-mobile);
+		
+		@media (min-width: 768px) {
+			width: var(--size-logo-hero-desktop);
+		}
+		
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+		}
+	}
+
+	.hero-text {
+		display: flex;
+		flex-direction: column;
+		gap: var(--gap-3);
+		max-width: var(--measure);
+		
+		h1 {
+			font-size: var(--text-display);
+			font-weight: var(--weight-bold);
+			line-height: var(--leading-tight);
+			color: var(--color-brand);
+			padding-bottom: var(--gap-1);
+		}
+		
+		p {
+			font-size: var(--text-lead);
+			font-weight: var(--weight-regular);
+			line-height: var(--leading-snug);
+			color:white;
+			text-wrap: pretty;
+			max-width: var(--measure);
+		}
+	}
+
+	/* ---------- GAME LIST ---------- */
+	.games {
+		display: flex;
+		flex-direction: column;
+		gap: var(--gap-6);
+		width: 100%;
+		max-width: var(--content-max-width);
+		margin-inline: auto;
+		padding-inline: var(--gutter);
+	}
+
+	.section-head {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--gap-4);
+		padding-bottom: var(--gap-3);
+		border-bottom: var(--border-thin) solid var(--color-border);
+		
+		h2 {
+			display: flex;
+			align-items: center;
+			gap: var(--gap-3);
+			font-size: var(--text-heading);
+			font-weight: var(--weight-bold);
+			line-height: var(--leading-tight);
+			color: var(--color-text);
+		}
+		
+		/* Headband stripe: a nod to the mascot */
+		h2::before {
+			content: '';
+			flex-shrink: 0;
+			width: var(--gap-6);
+			height: var(--gap-1);
+			border-radius: var(--radius-circle);
+			background-color: var(--color-accent);
+		}
+	}
+
+	.count {
+		font-size: var(--text-caption);
+		letter-spacing: var(--tracking-wide);
+		color: var(--color-text-subtle);
+	}
+
+	/* One column on phones; adds a column whenever another card fits */
+	.game-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min-width)), 1fr));
+		gap: var(--grid-gap);
+	}
+</style>

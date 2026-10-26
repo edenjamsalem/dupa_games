@@ -1,0 +1,45 @@
+{
+  "name": "game-astro-web",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "init": "npm install && npm run update-submodule:all && npm run build:all",
+    "preview:static": "astro build && python3 -m http.server 8000 --directory dist",
+    "build:game": "bun run scripts/build-game.js",
+    "build:all": "bun run scripts/build-all.js",
+    "update:submodule": "bun run scripts/update-submodule.js",
+    "update-submodule:all": "bun run scripts/update-submodule-all.js"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.2.6",
+    "@lucide/astro": "^1.23.0",
+    "astro": "^7.2.10",
+    "bun": "^1.3.14",
+    "papaparse": "^5.7.0",
+    "sass": "^1.104.1",
+    "swiper": "^14.0.1",
+    "webcoreui": "^1.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.4.1",
+    "@types/papaparse": "^5.5.2",
+    "eslint": "^10.2.0",
+    "eslint-plugin-astro": "^1.7.0",
+    "prettier": "^3.8.1",
+    "prettier-plugin-astro": "^0.14.1",
+    "stylelint": "^17.8.0",
+    "stylelint-config-html": "^1.1.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-prettier": "^5.0.3",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.58.2"
+  }
+}
